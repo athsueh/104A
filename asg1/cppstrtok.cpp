@@ -19,6 +19,7 @@ using namespace std;
 #include <vector>
 
 #include "auxlib.h"
+#include "stringset.h"
 
 const string CPP = "/usr/bin/cpp";
 const size_t LINESIZE = 1024;
@@ -42,12 +43,13 @@ void cpplines (FILE* pipe, char* filename) {
       char* fgets_rc = fgets (buffer, LINESIZE, pipe);
       if (fgets_rc == NULL) break;
       chomp (buffer, '\n');
-      printf ("%s:line %d: [%s]\n", filename, linenr, buffer);
+      DEBUGF ('T', "%s:line %d: [%s]\n", filename, linenr, buffer);
       // http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
       int sscanf_rc = sscanf (buffer, "# %d \"%[^\"]\"",
                               &linenr, filename);
       if (sscanf_rc == 2) {
-         printf ("DIRECTIVE: line %d file \"%s\"\n", linenr, filename);
+         DEBUGF ('T', "DIRECTIVE: line %d file \"%s\"\n",
+                 linenr, filename);
          continue;
       }
       char* savepos = NULL;
@@ -56,8 +58,9 @@ void cpplines (FILE* pipe, char* filename) {
          char* token = strtok_r (bufptr, " \t\n", &savepos);
          bufptr = NULL;
          if (token == NULL) break;
-         printf ("token %d.%d: [%s]\n",
+         DEBUGF ('T', "token %d.%d: [%s]\n",
                  linenr, tokenct, token);
+         intern_stringset(token);
       }
       ++linenr;
    }
@@ -112,7 +115,7 @@ int main (int argc, char** argv) {
    filename = basename(&filename_charstar[0]);
 
    string command = CPP + " " + d_opt + filepath;
-   printf ("command=\"%s\"\n", command.c_str());
+   DEBUGF ('T', "command=\"%s\"\n", command.c_str());
    FILE* pipe = popen (command.c_str(), "r");
    if (pipe == NULL) {
       syserrprintf (command.c_str());
@@ -127,7 +130,7 @@ int main (int argc, char** argv) {
 
    ofstream dotstr;
    dotstr.open (filename);
-   dotstr << "FILE CREATED" << std::endl;
+   dump_stringset(dotstr);
    dotstr.close();
 
    return get_exitstatus();
