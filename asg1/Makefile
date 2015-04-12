@@ -41,3 +41,6 @@ spotless : clean
 
 again :
 	${GMAKE} spotless dep ci all lis
+
+submit :
+	submit cmps104a-wm.s15 asg1 ${CPPSOURCE} ${CPPHEADER} ${OTHERS}

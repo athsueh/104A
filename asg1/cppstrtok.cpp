@@ -94,7 +94,17 @@ string scan_options (int argc, char** argv) {
 int main (int argc, char** argv) {
    set_execname (argv[0]);
    std::string d_opt = scan_options(argc,argv);
+
    char* filename = argv[argc-1];
+   int lastindex = filename.find_last_of(".");
+   if(lastindex == filename::npos) {
+      // TODO return a bad filename error
+      stderr << "oc: bad filename \""+filename+"\"" std::endl;
+      return 1;
+   }
+   filename = filename.substr(0, lastindex) + ".str";
+   filename = basename(filename);
+
    string command = CPP + " " + d_opt + filename;
    printf ("command=\"%s\"\n", command.c_str());
    FILE* pipe = popen (command.c_str(), "r");
