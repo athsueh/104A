@@ -9,8 +9,8 @@ GMAKE       = ${MAKE} --no-print-directory
 COMPILECPP  = g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11
 MAKEDEPCPP  = g++ -MM
 
-CPPSOURCE   = commands.cpp debug.cpp inode.cpp util.cpp main.cpp
-CPPHEADER   = commands.h debug.h inode.h util.h
+CPPSOURCE   = auxlib.cpp cppstrtok.cpp main.cpp stringset.cpp
+CPPHEADER   = auxlib.h stringset.h
 EXECBIN     = yshell
 OBJECTS     = ${CPPSOURCE:.cpp=.o}
 OTHERS      = ${MKFILE} README PARTNER
