@@ -1,0 +1,90 @@
+Copy this file and all test files into the submit directory.
+Run the script mk.build then mk.test.
+After each item below, indicate with a negative number the
+reason for each point deduction.
+
+=================================================================
+
+SOURCE CODE /30 points
+
+    mk.build
+
+    (3) checksource did not complain.  If it does, deduct
+        minimum (3, int (complaints / 5))
+        (BUT DO NOT DEDUCT FOR FLEX/BISON GENERATED CODE).
+
+    (3) Good overall coding style, choice of identifiers,
+        readability indentation.
+
+    (3) Neatly written switch statement or array dispatch to
+        select code generation actions based on token codes
+
+    (3) Code to handle code generation for top level constructs
+        structs, stringdefs, global decls w/o initializtion
+
+    (3) Code to handle generation of functions headers,
+        parameter lists, and braces around the bodies of
+        functions.
+
+    (3) Code to handle generation of code for statements:  if,
+        while, return
+
+    (3) Code to handle generation of code for binary and unary
+        extpresions.
+
+    (3) Code to properly allocate temporaries (vregs) for 
+        expressions
+
+    (3) Code to mangle names as appropriate for the assignment.
+
+    (3) Code to emit the three kinds of new operator.
+
+total source points=
+min 1, max 30
+
+=================================================================
+
+PROGRAM TESTING /30 points
+
+    mk.tests
+
+    If an executable called oc was not built by make, skip this
+    section and assign 0 points.
+
+    (3) exit status 0 for successful compiles, non-zero for fail
+
+    (3) .str, .tok, .ast, and .sym  files created as per earlier
+        project specs
+
+    (3) Format of emitted code appears as per specs, properly
+        indented and with an assembly language (3AC) appearance.
+
+    (3) Error messages printed for invalid input files, but
+        compilation continues.  9*.oc does not cause compiler
+        to crash.
+
+   (12) Allocate 2 points for each category of test files and
+        check for properly generated and correct code.  Categories
+        are:  0*.oc, 1*.oc, 2*.oc, 3*.oc, 4*.oc 5*.oc.
+        with wildcard pattern matching.  Ignore 9*.oc here.
+        Do not deduct points for incorrectly generated .oil files
+        if earlier phases of compilation report errors in the .oc
+        file.
+
+    (6) Deduct 2 points, max 6, for each run that reports a
+        seg fault, dumps core, etc.
+
+total testing points=
+min 0, max 30
+
+=================================================================
+
+SUBTOTAL=
+min 1, max 60
+
+If pair programming, TOTALSCORE = SUBTOTAL - TOTAL1.
+If not, TOTALSCORE = SUBTOTAL.
+
+TOTALSCORE=
+min 1, max 60
+
