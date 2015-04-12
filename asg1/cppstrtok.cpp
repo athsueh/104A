@@ -16,6 +16,8 @@ using namespace std;
 
 #include "auxlib.h"
 
+#include <unistd.h>
+
 const string CPP = "/usr/bin/cpp";
 const size_t LINESIZE = 1024;
 
@@ -27,7 +29,7 @@ void chomp (char* string, char delim) {
    if (*nlpos == delim) *nlpos = '\0';
 }
 
-
+
 // Run cpp against the lines of the file.
 void cpplines (FILE* pipe, char* filename) {
    int linenr = 1;
@@ -59,8 +61,8 @@ void cpplines (FILE* pipe, char* filename) {
    }
 }
 
-void scan_options (int argc, char** argv) {
-   opterr = 0;
+string scan_options (int argc, char** argv) {
+   string dStr = "";
    for (;;) {
       int option = getopt (argc, argv, "ylD:@:");
       if (option == EOF) break;
@@ -68,22 +70,35 @@ void scan_options (int argc, char** argv) {
          case '@':
             debugflags::setflags (optarg);
             break;
+		 case 'D':
+			dStr=string(optarg);
+			break;
+		 case 'y':
+			//yydebug = 1
+		 break;
+		 case 'l':
+			//yy_flex_debug = 1
+		 break;
          default:
-            complain() << "-" << (char) option << ": invalid option"
-                       << endl;
+            //complain() << "-" << (char) option << ": invalid option"
+            //           << endl;
             break;
       }
+	  
    }
-   if (optind < argc) {
-      complain() << "operands not permitted" << endl;
-   }
+   //if (optind < argc) {
+      //complain() << "operands not permitted" << endl;
+   //}
+   if(strcmp("", dStr) != 0) return "-D"+dStr+" ";
+   return dStr;
 }
 
 int main (int argc, char** argv) {
    set_execname (argv[0]);
    for (int argi = 1; argi < argc; ++argi) {
+	  std::string d_opt = scan_options(argc,argv);
       char* filename = argv[argi];
-      string command = CPP + " " + filename;
+      string command = CPP + " " + d_opt + filename;
       printf ("command=\"%s\"\n", command.c_str());
       FILE* pipe = popen (command.c_str(), "r");
       if (pipe == NULL) {
