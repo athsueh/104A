@@ -11,7 +11,7 @@ MAKEDEPCPP  = g++ -MM
 
 CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp
 CPPHEADER   = auxlib.h stringset.h
-EXECBIN     = yshell
+EXECBIN     = oc
 OBJECTS     = ${CPPSOURCE:.cpp=.o}
 OTHERS      = ${MKFILE} README PARTNER
 ALLSOURCES  = ${CPPHEADER} ${CPPSOURCE} ${OTHERS}
