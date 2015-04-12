@@ -12,11 +12,10 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <wait.h>
 
 #include "auxlib.h"
-
-#include <unistd.h>
 
 const string CPP = "/usr/bin/cpp";
 const size_t LINESIZE = 1024;
@@ -68,35 +67,34 @@ string scan_options (int argc, char** argv) {
       if (option == EOF) break;
       switch (option) {
          case '@':
-            debugflags::setflags (optarg);
-            break;
-		 case 'D':
-			dStr=string(optarg);
-			break;
-		 case 'y':
-			//yydebug = 1
-		 break;
-		 case 'l':
-			//yy_flex_debug = 1
-		 break;
+            set_debugflags (optarg);
+         break;
+         case 'D':
+            dStr=string(optarg);
+         break;
+         case 'y':
+            //yydebug = 1
+         break;
+         case 'l':
+            //yy_flex_debug = 1
+          break;
          default:
             //complain() << "-" << (char) option << ": invalid option"
             //           << endl;
-            break;
+         break;
       }
-	  
    }
    //if (optind < argc) {
       //complain() << "operands not permitted" << endl;
    //}
-   if(strcmp("", dStr) != 0) return "-D"+dStr+" ";
+   if(strcmp("", dStr.c_str()) != 0) return "-D"+dStr+" ";
    return dStr;
 }
 
 int main (int argc, char** argv) {
    set_execname (argv[0]);
    for (int argi = 1; argi < argc; ++argi) {
-	  std::string d_opt = scan_options(argc,argv);
+      std::string d_opt = scan_options(argc,argv);
       char* filename = argv[argi];
       string command = CPP + " " + d_opt + filename;
       printf ("command=\"%s\"\n", command.c_str());
