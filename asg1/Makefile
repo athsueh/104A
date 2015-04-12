@@ -6,10 +6,10 @@ NOINCL      = ci clean spotless
 NEEDINCL    = ${filter ${NOINCL}, ${MAKECMDGOALS}}
 GMAKE       = ${MAKE} --no-print-directory
 
-COMPILECPP  = g++ -g -O0 -Wall -Wextra -rdynamic -std=gnu++11
+COMPILECPP  = g++ -g -O0 -Wall -Wextra -std=gnu++11
 MAKEDEPCPP  = g++ -MM
 
-CPPSOURCE   = auxlib.cpp cppstrtok.cpp main.cpp stringset.cpp
+CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp
 CPPHEADER   = auxlib.h stringset.h
 EXECBIN     = yshell
 OBJECTS     = ${CPPSOURCE:.cpp=.o}
@@ -39,18 +39,5 @@ clean :
 spotless : clean
 	- rm ${EXECBIN} ${LISTING} ${LISTING:.ps=.pdf}
 
-dep : ${CPPSOURCE} ${CPPHEADER}
-	@ echo "# ${DEPFILE} created `LC_TIME=C date`" >${DEPFILE}
-	${MAKEDEPCPP} ${CPPSOURCE} >>${DEPFILE}
-
-${DEPFILE} : ${MKFILE}
-	@ touch ${DEPFILE}
-	${GMAKE} dep
-
 again :
 	${GMAKE} spotless dep ci all lis
-
-ifeq (${NEEDINCL}, )
-include ${DEPFILE}
-endif
-
