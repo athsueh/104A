@@ -59,6 +59,26 @@ void cpplines (FILE* pipe, char* filename) {
    }
 }
 
+void scan_options (int argc, char** argv) {
+   opterr = 0;
+   for (;;) {
+      int option = getopt (argc, argv, "ylD:@:");
+      if (option == EOF) break;
+      switch (option) {
+         case '@':
+            debugflags::setflags (optarg);
+            break;
+         default:
+            complain() << "-" << (char) option << ": invalid option"
+                       << endl;
+            break;
+      }
+   }
+   if (optind < argc) {
+      complain() << "operands not permitted" << endl;
+   }
+}
+
 int main (int argc, char** argv) {
    set_execname (argv[0]);
    for (int argi = 1; argi < argc; ++argi) {
