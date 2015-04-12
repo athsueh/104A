@@ -1,0 +1,4 @@
+# Makefile.dep created Sat Apr 11 17:49:44 PDT 2015
+auxlib.o: auxlib.cpp auxlib.h
+cppstrtok.o: cppstrtok.cpp auxlib.h
+main.o: main.cpp stringset.h
