@@ -95,14 +95,14 @@ int main (int argc, char** argv) {
    set_execname (argv[0]);
    std::string d_opt = scan_options(argc,argv);
 
-   char* filename = argv[argc-1];
-   int lastindex = filename.find_last_of(".");
-   if(lastindex == filename::npos) {
+   char* filepath = argv[argc-1];
+   int lastindex = filepath.find_last_of(".");
+   if(lastindex == filepath::npos) {
       // TODO return a bad filename error
-      stderr << "oc: bad filename \""+filename+"\"" std::endl;
+      stderr << "oc: bad filename \""+filepath+"\"" std::endl;
       return 1;
    }
-   filename = filename.substr(0, lastindex) + ".str";
+   string filename = filepath.substr(0, lastindex) + ".str";
    filename = basename(filename);
 
    string command = CPP + " " + d_opt + filename;
