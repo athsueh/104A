@@ -102,10 +102,16 @@ int main (int argc, char** argv) {
    std::string d_opt = scan_options(argc,argv);
 
    string filepath = string(argv[argc-1]);
+   size_t firstindex = filepath.find_first_of(".");
    size_t lastindex = filepath.find_last_of(".");
-   if(lastindex == string::npos) {
+   if(lastindex == string::npos || lastindex != firstindex) {
       // TODO return a bad filename error
-      cerr << "oc: bad filename \"" << filepath << "\"" << std::endl;
+      cerr << "oc: bad filename: \"" << filepath << "\"" << std::endl;
+      return 1;
+   }
+   if(filepath.substr(lastindex).compare(".oc")) {
+      cerr << "oc: bad file extension; must be a .oc file: \"" <<
+              filepath << "\"" << std::endl;
       return 1;
    }
    string filename = filepath.substr(0, lastindex) + ".str";
