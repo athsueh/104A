@@ -105,8 +105,7 @@ int main (int argc, char** argv) {
    size_t firstindex = filepath.find_first_of(".");
    size_t lastindex = filepath.find_last_of(".");
    if(lastindex == string::npos || lastindex != firstindex) {
-      // TODO return a bad filename error
-      cerr << "oc: bad filename: \"" << filepath << "\"" << std::endl;
+      cerr << "oc: bad file extension; must be a .oc file: \"" <<
       return 1;
    }
    if(filepath.substr(lastindex).compare(".oc")) {
