@@ -1,0 +1,82 @@
+$Id: SCORE.asg3,v 1.1 2015-03-17 15:42:29-07 - - $
+
+Copy this file and all test files into the submit directory.
+Run the script mk.build then mk.test.
+After each item below, indicate with a negative number the
+reason for each point deduction.
+
+=================================================================
+
+SOURCE CODE /30 points
+
+    mk.build
+
+    (3) checksource did not complain.  If it does, deduct
+        minimum (3, int (complaints / 5))
+        (BUT DO NOT DEDUCT FOR FLEX/BISON GENERATED CODE).
+
+    (3) Good overall coding style, choice of identifiers,
+        readability indentation.
+
+    (3) parser.y productions neatly lined up with short
+        semantic actions also neatly lined up
+
+    (3) Code to substitute scanner token codes with those
+        indicated in parser assignment when appropriate
+
+    (3) properly rearranged the grammar given in the assignment
+        with token declarations and precedence/assoc where
+        appropriate
+
+    (3) properly rearranged grammar to handle optional [] and
+        repeated []... parts of the user grammer
+
+    (3) syntax specified for expressions
+
+    (3) syntax specified for statements
+
+    (3) syntax specified for functions
+
+    (3) syntax specified for struct and variable declarations
+
+total source points=
+min 1, max 30
+
+=================================================================
+
+PROGRAM TESTING /30 points
+
+    mk.tests
+
+    If an executable called oc was not built by make, skip this
+    section and assign 0 points.
+
+    (3) exit status 0 for successful compiles, non-zero for fail
+
+    (3) test with -y option produces yyparse token trace
+
+    (3) .str and .tok files created as per project 1 & 2 specs
+
+    (3) output shows AST as per the sample figure in the assignment
+        spec, with token, lexinfo, and serial number 
+
+    (3) For the 9*.oc programs, parser returned to main and
+        program exited without a seg fault or other crash.
+        Some of the files have parse errors, nothers not.
+
+    (9) Correct information for each of the output .ast files.
+        Deduct 2 points for each incorrect one but not more than
+        9 points for this section.  Do not deduct points for
+        weird output from the 9*.oc programs.
+
+    (6) Deduct 2 points, max 6, for each run that reports a
+        seg fault, dumps core, etc.
+
+total testing points=
+min 0, max 30
+
+=================================================================
+
+TOTALSCORE=
+min 1, max 60
+
