@@ -12,8 +12,11 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <fstream>
 #include <unistd.h>
 #include <wait.h>
+#include <vector>
 
 #include "auxlib.h"
 
@@ -95,26 +98,38 @@ int main (int argc, char** argv) {
    set_execname (argv[0]);
    std::string d_opt = scan_options(argc,argv);
 
-   char* filepath = argv[argc-1];
-   int lastindex = filepath.find_last_of(".");
-   if(lastindex == filepath::npos) {
+   string filepath = string(argv[argc-1]);
+   size_t lastindex = filepath.find_last_of(".");
+   if(lastindex == string::npos) {
       // TODO return a bad filename error
-      stderr << "oc: bad filename \""+filepath+"\"" std::endl;
+      cerr << "oc: bad filename \"" << filepath << "\"" << std::endl;
       return 1;
    }
    string filename = filepath.substr(0, lastindex) + ".str";
-   filename = basename(filename);
+   std::vector<char> filename_charstar(filename.begin(),
+                                       filename.end());
+   filename_charstar.push_back('\0');
+   filename = basename(&filename_charstar[0]);
 
-   string command = CPP + " " + d_opt + filename;
+   string command = CPP + " " + d_opt + filepath;
    printf ("command=\"%s\"\n", command.c_str());
    FILE* pipe = popen (command.c_str(), "r");
    if (pipe == NULL) {
       syserrprintf (command.c_str());
    }else {
-      cpplines (pipe, filename);
+      std::vector<char> filepath_charstar(filepath.begin(),
+                                          filepath.end());
+      filepath_charstar.push_back('\0');
+      cpplines (pipe, &filepath_charstar[0]);
       int pclose_rc = pclose (pipe);
       eprint_status (command.c_str(), pclose_rc);
    }
+
+   ofstream dotstr;
+   dotstr.open (filename);
+   dotstr << "FILE CREATED" << std::endl;
+   dotstr.close();
+
    return get_exitstatus();
 }
 
