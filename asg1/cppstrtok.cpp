@@ -93,19 +93,17 @@ string scan_options (int argc, char** argv) {
 
 int main (int argc, char** argv) {
    set_execname (argv[0]);
-   for (int argi = 1; argi < argc; ++argi) {
-      std::string d_opt = scan_options(argc,argv);
-      char* filename = argv[argi];
-      string command = CPP + " " + d_opt + filename;
-      printf ("command=\"%s\"\n", command.c_str());
-      FILE* pipe = popen (command.c_str(), "r");
-      if (pipe == NULL) {
-         syserrprintf (command.c_str());
-      }else {
-         cpplines (pipe, filename);
-         int pclose_rc = pclose (pipe);
-         eprint_status (command.c_str(), pclose_rc);
-      }
+   std::string d_opt = scan_options(argc,argv);
+   char* filename = argv[argc-1];
+   string command = CPP + " " + d_opt + filename;
+   printf ("command=\"%s\"\n", command.c_str());
+   FILE* pipe = popen (command.c_str(), "r");
+   if (pipe == NULL) {
+      syserrprintf (command.c_str());
+   }else {
+      cpplines (pipe, filename);
+      int pclose_rc = pclose (pipe);
+      eprint_status (command.c_str(), pclose_rc);
    }
    return get_exitstatus();
 }
