@@ -102,23 +102,29 @@ int main (int argc, char** argv) {
    std::string d_opt = scan_options(argc,argv);
 
    string filepath = string(argv[argc-1]);
-   size_t firstindex = filepath.find_first_of(".");
-   size_t lastindex = filepath.find_last_of(".");
-   if(lastindex == string::npos || lastindex != firstindex) {
-      cerr << "oc: bad file extension; must be a .oc file: \"" <<
-              filepath << "\"" << std::endl;
-      return 1;
-   }
-   if(filepath.substr(lastindex).compare(".oc")) {
-      cerr << "oc: bad file extension; must be a .oc file: \"" <<
-              filepath << "\"" << std::endl;
-      return 1;
-   }
-   string filename = filepath.substr(0, lastindex) + ".str";
+
+   string filename = filepath.substr(0);
    std::vector<char> filename_charstar(filename.begin(),
                                        filename.end());
    filename_charstar.push_back('\0');
    filename = basename(&filename_charstar[0]);
+
+   size_t firstindex = filename.find_first_of(".");
+   size_t lastindex = filename.find_last_of(".");
+
+   if(lastindex == string::npos || lastindex != firstindex) {
+      cerr << "oc: bad file extension(s); wrong number of dots; "<<
+              "must be a .oc file: \"" <<
+              filepath << "\"" << std::endl;
+      return 1;
+   }
+   if(filename.substr(lastindex).compare(".oc")) {
+      cerr << "oc: bad file extension; must be a .oc file: \"" <<
+              filepath << "\"" << std::endl;
+      return 1;
+   }
+
+   filename = filename.substr(0, lastindex) + ".str";
 
    string command = CPP + " " + d_opt + filepath;
    DEBUGF ('T', "command=\"%s\"\n", command.c_str());
