@@ -9,7 +9,13 @@ GMAKE       = ${MAKE} --no-print-directory
 COMPILECPP  = g++ -g -O0 -Wall -Wextra -std=gnu++11
 MAKEDEPCPP  = g++ -MM
 
-CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp
+LSOURCES    = scanner.l
+HYGEN       = yyparse.h
+CYGEN       = yyparse.cpp
+LREPORT     = yylex.output
+YREPORT     = yyparse.output
+
+CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp ${CLGEN} ${CYGEN}
 CPPHEADER   = auxlib.h stringset.h
 EXECBIN     = oc
 OBJECTS     = ${CPPSOURCE:.cpp=.o}
@@ -42,5 +48,12 @@ spotless : clean
 again :
 	${GMAKE} spotless dep ci all lis
 
+${CLGEN} : ${LSOURCES}
+	flex --outfile=${CLGEN} ${LSOURCES} 2>${LREPORT}
+	- grep -v 'ˆ ' ${LREPORT}
+
+${CYGEN} ${HYGEN} : ${YSOURCES}
+	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
+
 submit :
-	submit cmps104a-wm.s15 asg1 ${CPPSOURCE} ${CPPHEADER} ${OTHERS}
+	submit cmps104a-wm.s15 asg2 ${CPPSOURCE} ${CPPHEADER} ${OTHERS}

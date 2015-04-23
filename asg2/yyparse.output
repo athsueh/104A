@@ -1,0 +1,520 @@
+Terminals unused in grammar
+
+   TOK_BLOCK
+   TOK_CALL
+   TOK_IFELSE
+   TOK_INITDECL
+   TOK_POS
+   TOK_NEG
+   TOK_NEWARRAY
+   TOK_TYPEID
+   TOK_FIELD
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program token
+    2        | /* empty */
+
+    3 token: '('
+    4      | ')'
+    5      | '['
+    6      | ']'
+    7      | '{'
+    8      | '}'
+    9      | ';'
+   10      | ','
+   11      | '.'
+   12      | '='
+   13      | '+'
+   14      | '-'
+   15      | '*'
+   16      | '/'
+   17      | '%'
+   18      | '!'
+   19      | TOK_VOID
+   20      | TOK_BOOL
+   21      | TOK_CHAR
+   22      | TOK_INT
+   23      | TOK_STRING
+   24      | TOK_IF
+   25      | TOK_ELSE
+   26      | TOK_WHILE
+   27      | TOK_RETURN
+   28      | TOK_STRUCT
+   29      | TOK_FALSE
+   30      | TOK_TRUE
+   31      | TOK_NULL
+   32      | TOK_NEW
+   33      | TOK_ARRAY
+   34      | TOK_EQ
+   35      | TOK_NE
+   36      | TOK_LT
+   37      | TOK_LE
+   38      | TOK_GT
+   39      | TOK_GE
+   40      | TOK_IDENT
+   41      | TOK_INTCON
+   42      | TOK_CHARCON
+   43      | TOK_STRINGCON
+   44      | TOK_ORD
+   45      | TOK_CHR
+   46      | TOK_ROOT
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 18
+'%' (37) 17
+'(' (40) 3
+')' (41) 4
+'*' (42) 15
+'+' (43) 13
+',' (44) 10
+'-' (45) 14
+'.' (46) 11
+'/' (47) 16
+';' (59) 9
+'=' (61) 12
+'[' (91) 5
+']' (93) 6
+'{' (123) 7
+'}' (125) 8
+error (256)
+TOK_VOID (258) 19
+TOK_BOOL (259) 20
+TOK_CHAR (260) 21
+TOK_INT (261) 22
+TOK_STRING (262) 23
+TOK_IF (263) 24
+TOK_ELSE (264) 25
+TOK_WHILE (265) 26
+TOK_RETURN (266) 27
+TOK_STRUCT (267) 28
+TOK_FALSE (268) 29
+TOK_TRUE (269) 30
+TOK_NULL (270) 31
+TOK_NEW (271) 32
+TOK_ARRAY (272) 33
+TOK_EQ (273) 34
+TOK_NE (274) 35
+TOK_LT (275) 36
+TOK_LE (276) 37
+TOK_GT (277) 38
+TOK_GE (278) 39
+TOK_IDENT (279) 40
+TOK_INTCON (280) 41
+TOK_CHARCON (281) 42
+TOK_STRINGCON (282) 43
+TOK_BLOCK (283)
+TOK_CALL (284)
+TOK_IFELSE (285)
+TOK_INITDECL (286)
+TOK_POS (287)
+TOK_NEG (288)
+TOK_NEWARRAY (289)
+TOK_TYPEID (290)
+TOK_FIELD (291)
+TOK_ORD (292) 44
+TOK_CHR (293) 45
+TOK_ROOT (294) 46
+
+
+Nonterminals, with rules where they appear
+
+$accept (56)
+    on left: 0
+program (57)
+    on left: 1 2, on right: 0 1
+token (58)
+    on left: 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+    24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44
+    45 46, on right: 1
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    1 program: program . token
+
+    $end           shift, and go to state 2
+    TOK_VOID       shift, and go to state 3
+    TOK_BOOL       shift, and go to state 4
+    TOK_CHAR       shift, and go to state 5
+    TOK_INT        shift, and go to state 6
+    TOK_STRING     shift, and go to state 7
+    TOK_IF         shift, and go to state 8
+    TOK_ELSE       shift, and go to state 9
+    TOK_WHILE      shift, and go to state 10
+    TOK_RETURN     shift, and go to state 11
+    TOK_STRUCT     shift, and go to state 12
+    TOK_FALSE      shift, and go to state 13
+    TOK_TRUE       shift, and go to state 14
+    TOK_NULL       shift, and go to state 15
+    TOK_NEW        shift, and go to state 16
+    TOK_ARRAY      shift, and go to state 17
+    TOK_EQ         shift, and go to state 18
+    TOK_NE         shift, and go to state 19
+    TOK_LT         shift, and go to state 20
+    TOK_LE         shift, and go to state 21
+    TOK_GT         shift, and go to state 22
+    TOK_GE         shift, and go to state 23
+    TOK_IDENT      shift, and go to state 24
+    TOK_INTCON     shift, and go to state 25
+    TOK_CHARCON    shift, and go to state 26
+    TOK_STRINGCON  shift, and go to state 27
+    TOK_ORD        shift, and go to state 28
+    TOK_CHR        shift, and go to state 29
+    TOK_ROOT       shift, and go to state 30
+    '('            shift, and go to state 31
+    ')'            shift, and go to state 32
+    '['            shift, and go to state 33
+    ']'            shift, and go to state 34
+    '{'            shift, and go to state 35
+    '}'            shift, and go to state 36
+    ';'            shift, and go to state 37
+    ','            shift, and go to state 38
+    '.'            shift, and go to state 39
+    '='            shift, and go to state 40
+    '+'            shift, and go to state 41
+    '-'            shift, and go to state 42
+    '*'            shift, and go to state 43
+    '/'            shift, and go to state 44
+    '%'            shift, and go to state 45
+    '!'            shift, and go to state 46
+
+    token  go to state 47
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+   19 token: TOK_VOID .
+
+    $default  reduce using rule 19 (token)
+
+
+state 4
+
+   20 token: TOK_BOOL .
+
+    $default  reduce using rule 20 (token)
+
+
+state 5
+
+   21 token: TOK_CHAR .
+
+    $default  reduce using rule 21 (token)
+
+
+state 6
+
+   22 token: TOK_INT .
+
+    $default  reduce using rule 22 (token)
+
+
+state 7
+
+   23 token: TOK_STRING .
+
+    $default  reduce using rule 23 (token)
+
+
+state 8
+
+   24 token: TOK_IF .
+
+    $default  reduce using rule 24 (token)
+
+
+state 9
+
+   25 token: TOK_ELSE .
+
+    $default  reduce using rule 25 (token)
+
+
+state 10
+
+   26 token: TOK_WHILE .
+
+    $default  reduce using rule 26 (token)
+
+
+state 11
+
+   27 token: TOK_RETURN .
+
+    $default  reduce using rule 27 (token)
+
+
+state 12
+
+   28 token: TOK_STRUCT .
+
+    $default  reduce using rule 28 (token)
+
+
+state 13
+
+   29 token: TOK_FALSE .
+
+    $default  reduce using rule 29 (token)
+
+
+state 14
+
+   30 token: TOK_TRUE .
+
+    $default  reduce using rule 30 (token)
+
+
+state 15
+
+   31 token: TOK_NULL .
+
+    $default  reduce using rule 31 (token)
+
+
+state 16
+
+   32 token: TOK_NEW .
+
+    $default  reduce using rule 32 (token)
+
+
+state 17
+
+   33 token: TOK_ARRAY .
+
+    $default  reduce using rule 33 (token)
+
+
+state 18
+
+   34 token: TOK_EQ .
+
+    $default  reduce using rule 34 (token)
+
+
+state 19
+
+   35 token: TOK_NE .
+
+    $default  reduce using rule 35 (token)
+
+
+state 20
+
+   36 token: TOK_LT .
+
+    $default  reduce using rule 36 (token)
+
+
+state 21
+
+   37 token: TOK_LE .
+
+    $default  reduce using rule 37 (token)
+
+
+state 22
+
+   38 token: TOK_GT .
+
+    $default  reduce using rule 38 (token)
+
+
+state 23
+
+   39 token: TOK_GE .
+
+    $default  reduce using rule 39 (token)
+
+
+state 24
+
+   40 token: TOK_IDENT .
+
+    $default  reduce using rule 40 (token)
+
+
+state 25
+
+   41 token: TOK_INTCON .
+
+    $default  reduce using rule 41 (token)
+
+
+state 26
+
+   42 token: TOK_CHARCON .
+
+    $default  reduce using rule 42 (token)
+
+
+state 27
+
+   43 token: TOK_STRINGCON .
+
+    $default  reduce using rule 43 (token)
+
+
+state 28
+
+   44 token: TOK_ORD .
+
+    $default  reduce using rule 44 (token)
+
+
+state 29
+
+   45 token: TOK_CHR .
+
+    $default  reduce using rule 45 (token)
+
+
+state 30
+
+   46 token: TOK_ROOT .
+
+    $default  reduce using rule 46 (token)
+
+
+state 31
+
+    3 token: '(' .
+
+    $default  reduce using rule 3 (token)
+
+
+state 32
+
+    4 token: ')' .
+
+    $default  reduce using rule 4 (token)
+
+
+state 33
+
+    5 token: '[' .
+
+    $default  reduce using rule 5 (token)
+
+
+state 34
+
+    6 token: ']' .
+
+    $default  reduce using rule 6 (token)
+
+
+state 35
+
+    7 token: '{' .
+
+    $default  reduce using rule 7 (token)
+
+
+state 36
+
+    8 token: '}' .
+
+    $default  reduce using rule 8 (token)
+
+
+state 37
+
+    9 token: ';' .
+
+    $default  reduce using rule 9 (token)
+
+
+state 38
+
+   10 token: ',' .
+
+    $default  reduce using rule 10 (token)
+
+
+state 39
+
+   11 token: '.' .
+
+    $default  reduce using rule 11 (token)
+
+
+state 40
+
+   12 token: '=' .
+
+    $default  reduce using rule 12 (token)
+
+
+state 41
+
+   13 token: '+' .
+
+    $default  reduce using rule 13 (token)
+
+
+state 42
+
+   14 token: '-' .
+
+    $default  reduce using rule 14 (token)
+
+
+state 43
+
+   15 token: '*' .
+
+    $default  reduce using rule 15 (token)
+
+
+state 44
+
+   16 token: '/' .
+
+    $default  reduce using rule 16 (token)
+
+
+state 45
+
+   17 token: '%' .
+
+    $default  reduce using rule 17 (token)
+
+
+state 46
+
+   18 token: '!' .
+
+    $default  reduce using rule 18 (token)
+
+
+state 47
+
+    1 program: program token .
+
+    $default  reduce using rule 1 (program)
