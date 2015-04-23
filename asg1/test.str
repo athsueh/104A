@@ -1,0 +1,8 @@
+stringset[   0]:   14223603838604189018: 0x1baf108->"eloheim"
+stringset[   3]:   12061210943727743834: 0x1baf408->"you"
+stringset[   4]:   14777839075779364226: 0x1baf368->"I"
+stringset[   5]:   16238446534628375788: 0x1baf318->"essiam"
+stringset[   9]:    8041032612743605704: 0x1baf3b8->"implore"
+load_factor = 0.455
+bucket_count = 11
+max_bucket_size = 1
