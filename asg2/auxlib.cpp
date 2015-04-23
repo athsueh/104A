@@ -52,7 +52,10 @@ void eprint_status (const char* command, int status) {
    eprintf ("\n");
 }
 
-
+int get_exitstatus (void) {
+   return exitstatus;
+}
+
 void veprintf (const char* format, va_list args) {
    assert (execname != NULL);
    assert (format != NULL);
@@ -82,10 +85,6 @@ void errprintf (const char* format, ...) {
 
 void syserrprintf (const char* object) {
    errprintf ("%:%s: %s\n", object, strerror (errno));
-}
-
-int get_exitstatus (void) {
-   return exitstatus;
 }
 
 void set_exitstatus (int newexitstatus) {
@@ -129,5 +128,5 @@ void __debugprintf (char flag, const char* file, int line,
    fflush (NULL);
 }
 
-RCSC("$Id: auxlib.cpp,v 1.2 2014-10-07 18:07:29-07 - - $")
+RCSC("$Id: auxlib.cpp,v 1.1 2014-10-03 18:22:05-07 - - $")
 
