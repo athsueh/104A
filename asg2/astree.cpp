@@ -97,5 +97,5 @@ void free_ast2 (astree* tree1, astree* tree2) {
    free_ast (tree2);
 }
 
-RCSC("$Id: astree.cpp,v 1.6 2015-04-09 19:31:47-07 - - $")
+RCSC("$Id: astree.cpp,v 1.1 2015-04-26 20:23:14-07 - - $")
 

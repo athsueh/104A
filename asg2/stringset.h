@@ -1,4 +1,4 @@
-// $Id: stringset.h,v 1.4 2014-10-09 15:42:13-07 - - $
+// $Id: stringset.h,v 1.1 2015-04-26 20:23:14-07 - - $
 
 #ifndef __STRINGSET__
 #define __STRINGSET__

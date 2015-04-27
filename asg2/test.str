@@ -1,8 +1,0 @@
-stringset[   0]:    2175664726934428180: 0x256f318->"chan"
-stringset[   1]:   14805956887413897162: 0x256f408->"baka"
-stringset[   7]:    4993892634952068459: 0x256f3b8->"a"
-                   14481510741918333043: 0x256f368->"is"
-stringset[   9]:   11814351516497451282: 0x256f108->"onii"
-load_factor = 0.455
-bucket_count = 11
-max_bucket_size = 2

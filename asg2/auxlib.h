@@ -123,5 +123,5 @@ void __debugprintf (char flag, const char* file, int line,
 #define RCSH(X) RCS2(__COUNTER__,X)
 #define RCSC(X) RCSH(X \
 "\0$Compiled: " __FILE__ " " __DATE__ " " __TIME__ " $")
-RCSH("$Id: auxlib.h,v 1.2 2013-10-11 18:53:00-07 - - $") 
+RCSH("$Id: auxlib.h,v 1.1 2015-04-26 20:23:14-07 - - $") 
 #endif

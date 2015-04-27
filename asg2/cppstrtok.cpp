@@ -1,4 +1,4 @@
-// $Id: cppstrtok.cpp,v 1.3 2014-10-07 18:09:11-07 - - $
+// $Id: cppstrtok.cpp,v 1.2 2015-04-26 20:23:46-07 - - $
 
 // Use cpp to scan a file and print line numbers.
 // Print out each input line read in, then strtok it for
@@ -20,6 +20,7 @@ using namespace std;
 
 #include "auxlib.h"
 #include "stringset.h"
+#include "lyutils.h"
 
 const string CPP = "/usr/bin/cpp";
 const size_t LINESIZE = 1024;
@@ -40,8 +41,8 @@ void cpplines (FILE* pipe, char* filename) {
    strcpy (inputname, filename);
    for (;;) {
       char buffer[LINESIZE];
-      char* fgets_rc = fgets (buffer, LINESIZE, pipe);
-      if (fgets_rc == NULL) break;
+      //char* fgets_rc = fgets (buffer, LINESIZE, pipe);
+      //if (fgets_rc == NULL) break;
       chomp (buffer, '\n');
       DEBUGF ('T', "%s:line %d: [%s]\n", filename, linenr, buffer);
       // http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
@@ -128,15 +129,19 @@ int main (int argc, char** argv) {
 
    string command = CPP + " " + d_opt + filepath;
    DEBUGF ('T', "command=\"%s\"\n", command.c_str());
-   FILE* pipe = popen (command.c_str(), "r");
-   if (pipe == NULL) {
+   FILE* yyin = popen (command.c_str(), "r");
+   if (yyin == NULL) {
       syserrprintf (command.c_str());
    }else {
-      std::vector<char> filepath_charstar(filepath.begin(),
-                                          filepath.end());
-      filepath_charstar.push_back('\0');
-      cpplines (pipe, &filepath_charstar[0]);
-      int pclose_rc = pclose (pipe);
+//      std::vector<char> filepath_charstar(filepath.begin(),
+//                                          filepath.end());
+//      filepath_charstar.push_back('\0');
+//      cpplines (pipe, &filepath_charstar[0]);
+
+      while(yylex() != YYEOF) {
+      }
+
+      int pclose_rc = pclose (yyin);
       eprint_status (command.c_str(), pclose_rc);
    }
 

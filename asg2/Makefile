@@ -1,62 +1,132 @@
-# $Id: Makefile,v 1.2 2015-01-20 21:25:38-08 - - $
+# $Id: Makefile,v 1.1 2015-04-26 20:23:14-07 - - $
 
-MKFILE      = Makefile
-DEPFILE     = ${MKFILE}.dep
-NOINCL      = ci clean spotless
-NEEDINCL    = ${filter ${NOINCL}, ${MAKECMDGOALS}}
-GMAKE       = ${MAKE} --no-print-directory
+MKFILE    = Makefile
+DEPSFILE  = ${MKFILE}.deps
+NOINCLUDE = ci clean spotless
+NEEDINCL  = ${filter ${NOINCLUDE}, ${MAKECMDGOALS}}
+VALGRIND  = valgrind --leak-check=full --show-reachable=yes
 
-COMPILECPP  = g++ -g -O0 -Wall -Wextra -std=gnu++11
-MAKEDEPCPP  = g++ -MM
+#
+# Definitions of list of files:
+#
+HSOURCES  = astree.h  lyutils.h  auxlib.h  stringset.h
+CSOURCES  = astree.cpp lyutils.cpp auxlib.cpp stringset.cpp cppstrtok.cpp
+LSOURCES  = scanner.l
+YSOURCES  = parser.y
+ETCSRC    = README ${MKFILE} ${DEPSFILE}
+CLGEN     = yylex.cpp
+HYGEN     = yyparse.h
+CYGEN     = yyparse.cpp
+CGENS     = ${CLGEN} ${CYGEN}
+ALLGENS   = ${HYGEN} ${CGENS}
+EXECBIN   = zexprsm
+ALLCSRC   = ${CSOURCES} ${CGENS}
+OBJECTS   = ${ALLCSRC:.cpp=.o}
+LREPORT   = yylex.output
+YREPORT   = yyparse.output
+IREPORT   = ident.output
+REPORTS   = ${LREPORT} ${YREPORT} ${IREPORT}
+ALLSRC    = ${ETCSRC} ${YSOURCES} ${LSOURCES} ${HSOURCES} ${CSOURCES}
+TESTINS   = ${wildcard test?.in}
+LISTSRC   = ${ALLSRC} ${HYGEN}
 
-LSOURCES = scanner.l
-YSOURCES = parser.y
-CLGEN = yylex.cpp
-HYGEN = yyparse.h
-CYGEN = yyparse.cpp
-LREPORT = yylex.output
-YREPORT = yyparse.output
+#
+# Definitions of the compiler and compilation options:
+#
+GCC       = g++ -g -O0 -Wall -Wextra -std=gnu++11
+MKDEPS    = g++ -MM -std=gnu++11
 
-CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp
-CPPHEADER   = auxlib.h stringset.h
-EXECBIN     = oc
-OBJECTS     = ${CPPSOURCE:.cpp=.o}
-OTHERS      = ${MKFILE} README PARTNER
-GENFILES    = ${CLGEN} ${CYGEN} ${HYGEN} ${LREPORT} ${YREPORT}
-ALLSOURCES  = ${CPPHEADER} ${CPPSOURCE} ${OTHERS}
-LISTING     = Listing.ps
-
+#
+# The first target is always ``all'', and hence the default,
+# and builds the executable images
+#
 all : ${EXECBIN}
-	- checksource ${ALLSOURCES}
 
+#
+# Build the executable image from the object files.
+#
 ${EXECBIN} : ${OBJECTS}
-	${COMPILECPP} -o $@ ${OBJECTS}
+	${GCC} -o${EXECBIN} ${OBJECTS}
+	ident ${OBJECTS} ${EXECBIN} >${IREPORT}
 
+#
+# Build an object file form a C source file.
+#
 %.o : %.cpp
-	${COMPILECPP} -c $<
+	${GCC} -c $<
 
-ci : ${ALLSOURCES}
-	cid + ${ALLSOURCES}
-	- checksource ${ALLSOURCES}
-
-lis : ${ALLSOURCES}
-	mkpspdf ${LISTING} ${ALLSOURCES} ${GENFILES} ${DEPFILE}
-
-clean :
-	- rm ${OBJECTS} ${GENFILES} ${DEPFILE} core ${EXECBIN}.errs
-
-spotless : clean
-	- rm ${EXECBIN} ${LISTING} ${LISTING:.ps=.pdf}
-
-again :
-	${GMAKE} spotless dep ci all lis
-
+
+#
+# Build the scanner.
+#
 ${CLGEN} : ${LSOURCES}
 	flex --outfile=${CLGEN} ${LSOURCES} 2>${LREPORT}
-	- grep -v '^ ' ${LREPORT}
+	- grep -v '^  ' ${LREPORT}
 
+#
+# Build the parser.
+#
 ${CYGEN} ${HYGEN} : ${YSOURCES}
 	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
-submit :
-	submit cmps104a-wm.s15 asg2 ${CPPSOURCE} ${CPPHEADER} ${OTHERS}
+#
+# Check sources into an RCS subdirectory.
+#
+ci : ${ALLSRC} ${TESTINS}
+	cid + ${ALLSRC} ${TESTINS} test?.inh
+
+#
+# Make a listing from all of the sources
+#
+lis : ${LISTSRC} tests
+	mkpspdf List.source.ps ${LISTSRC}
+	mkpspdf List.output.ps ${REPORTS} \
+		${foreach test, ${TESTINS:.in=}, \
+		${patsubst %, ${test}.%, in out err}}
+
+#
+# Clean and spotless remove generated files.
+#
+clean :
+	- rm ${OBJECTS} ${ALLGENS} ${REPORTS} ${DEPSFILE} core
+	- rm ${foreach test, ${TESTINS:.in=}, \
+		${patsubst %, ${test}.%, out err}}
+
+spotless : clean
+	- rm ${EXECBIN} List.*.ps List.*.pdf
+
+
+#
+# Build the dependencies file using the C preprocessor
+#
+deps : ${ALLCSRC}
+	@ echo "# ${DEPSFILE} created `date` by ${MAKE}" >${DEPSFILE}
+	${MKDEPS} ${ALLCSRC} >>${DEPSFILE}
+
+${DEPSFILE} :
+	@ touch ${DEPSFILE}
+	${MAKE} --no-print-directory deps
+
+#
+# Test
+#
+
+tests : ${EXECBIN}
+	touch ${TESTINS}
+	make --no-print-directory ${TESTINS:.in=.out}
+
+%.out %.err : %.in ${EXECBIN}
+	( ${VALGRIND} ${EXECBIN} -ly -@@ $< \
+	;  echo EXIT STATUS $$? 1>&2 \
+	) 1>$*.out 2>$*.err
+
+#
+# Everything
+#
+again :
+	gmake --no-print-directory spotless deps ci all lis
+	
+ifeq "${NEEDINCL}" ""
+include ${DEPSFILE}
+endif
+
