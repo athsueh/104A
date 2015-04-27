@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.1 2015-04-26 20:23:14-07 - - $
+# $Id: Makefile,v 1.3 2015-04-26 22:18:08-07 - - $
 
 MKFILE    = Makefile
 DEPSFILE  = ${MKFILE}.deps
@@ -9,8 +9,8 @@ VALGRIND  = valgrind --leak-check=full --show-reachable=yes
 #
 # Definitions of list of files:
 #
-HSOURCES  = astree.h  lyutils.h  auxlib.h  stringset.h
-CSOURCES  = astree.cpp lyutils.cpp auxlib.cpp stringset.cpp cppstrtok.cpp
+HSOURCES  = astree.h emit.h lyutils.h  auxlib.h stringset.h
+CSOURCES  = astree.cpp emit.cpp lyutils.cpp auxlib.cpp stringset.cpp cppstrtok.cpp
 LSOURCES  = scanner.l
 YSOURCES  = parser.y
 ETCSRC    = README ${MKFILE} ${DEPSFILE}
@@ -19,7 +19,7 @@ HYGEN     = yyparse.h
 CYGEN     = yyparse.cpp
 CGENS     = ${CLGEN} ${CYGEN}
 ALLGENS   = ${HYGEN} ${CGENS}
-EXECBIN   = zexprsm
+EXECBIN   = oc
 ALLCSRC   = ${CSOURCES} ${CGENS}
 OBJECTS   = ${ALLCSRC:.cpp=.o}
 LREPORT   = yylex.output

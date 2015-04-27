@@ -25,22 +25,23 @@ int yylex_destroy (void);
 const char* get_yytname (int symbol);
 bool is_defined_token (int symbol);
 
-const string* lexer_filename (int filenr);
-void lexer_newfilename (const char* filename);
-void lexer_badchar (unsigned char bad);
-void lexer_badtoken (char* lexeme);
-void lexer_newline (void);
-void lexer_setecho (bool echoflag);
-void lexer_useraction (void);
+const string* scanner_filename (int filenr);
+void scanner_newfilename (const char* filename);
+void scanner_badchar (unsigned char bad);
+void scanner_badtoken (char* lexeme);
+void scanner_newline (void);
+void scanner_setecho (bool echoflag);
+void scanner_useraction (void);
 
 astree* new_parseroot (void);
 int yylval_token (int symbol);
+void error_destructor (astree*);
 
-void lexer_include (void);
+void scanner_include (void);
 
-typedef astree* astree_pointer;
+using astree_pointer = astree*;
 #define YYSTYPE astree_pointer
 #include "yyparse.h"
 
-RCSH("$Id: lyutils.h,v 1.3 2015-04-09 17:45:26-07 - - $")
+RCSH("$Id: lyutils.h,v 1.2 2015-04-26 21:22:46-07 - - $")
 #endif

@@ -12,31 +12,32 @@ using namespace std;
 #include "lyutils.h"
 #include "auxlib.h"
 
-astree* yyparse_astree = NULL;
+//astree* yyparse_astree = NULL;
+//astree* yyparse_astree = new_parseroot();
 int scan_linenr = 1;
 int scan_offset = 0;
 bool scan_echo = false;
 vector<string> included_filenames;
 
-const string* lexer_filename (int filenr) {
+const string* scanner_filename (int filenr) {
    return &included_filenames.at(filenr);
 }
 
-void lexer_newfilename (const char* filename) {
+void scanner_newfilename (const char* filename) {
    included_filenames.push_back (filename);
 }
 
-void lexer_newline (void) {
+void scanner_newline (void) {
    ++scan_linenr;
    scan_offset = 0;
 }
 
-void lexer_setecho (bool echoflag) {
+void scanner_setecho (bool echoflag) {
    scan_echo = echoflag;
 }
 
 
-void lexer_useraction (void) {
+void scanner_useraction (void) {
    if (scan_echo) {
       if (scan_offset == 0) printf (";%5d: ", scan_linenr);
       printf ("%s", yytext);
@@ -47,54 +48,56 @@ void lexer_useraction (void) {
 void yyerror (const char* message) {
    assert (not included_filenames.empty());
    errprintf ("%:%s: %d: %s\n",
-              included_filenames.back().c_str(),
-              scan_linenr, message);
+              included_filenames.back().c_str(), scan_linenr, message);
 }
 
-void lexer_badchar (unsigned char bad) {
+void scanner_badchar (unsigned char bad) {
    char char_rep[16];
-   sprintf (char_rep, isgraph (bad) ? "%c" : "\\%03o", bad);
+   sprintf (char_rep, isgraph ((int) bad) ? "%c" : "\\%03o", bad);
    errprintf ("%:%s: %d: invalid source character (%s)\n",
-              included_filenames.back().c_str(),
-              scan_linenr, char_rep);
+              included_filenames.back().c_str(), scan_linenr, char_rep);
 }
 
-void lexer_badtoken (char* lexeme) {
+void scanner_badtoken (char* lexeme) {
    errprintf ("%:%s: %d: invalid token (%s)\n",
-              included_filenames.back().c_str(),
-              scan_linenr, lexeme);
+              included_filenames.back().c_str(), scan_linenr, lexeme);
 }
 
 int yylval_token (int symbol) {
    int offset = scan_offset - yyleng;
-   yylval = new astree (symbol, included_filenames.size() - 1,
-                        scan_linenr, offset, yytext);
+   //yylval = new_astree (symbol, included_filenames.size() - 1,
+   //                     scan_linenr, offset, yytext);
    return symbol;
 }
 
-astree* new_parseroot (void) {
-   yyparse_astree = new astree (TOK_ROOT, 0, 0, 0, "");
-   return yyparse_astree;
+/*void error_destructor (astree* tree) {
+   if (tree == yyparse_astree) return;
+   DEBUGSTMT ('a', dump_astree (stderr, tree); );
+   free_ast (tree);
 }
 
+astree* new_parseroot (void) {
+   yyparse_astree = new_astree (ROOT, 0, 0, 0, "<<ROOT>>");
+   return yyparse_astree;
+}*/
+
 
-void lexer_include (void) {
-   lexer_newline();
+void scanner_include (void) {
+   scanner_newline();
    char filename[strlen (yytext) + 1];
    int linenr;
-   int scan_rc = sscanf (yytext, "# %d \"%[^\"]\"",
-                         &linenr, filename);
+   int scan_rc = sscanf (yytext, "# %d \"%[^\"]\"", &linenr, filename);
    if (scan_rc != 2) {
       errprintf ("%: %d: [%s]: invalid directive, ignored\n",
                  scan_rc, yytext);
    }else {
       printf (";# %d \"%s\"\n", linenr, filename);
-      lexer_newfilename (filename);
+      scanner_newfilename (filename);
       scan_linenr = linenr - 1;
       DEBUGF ('m', "filename=%s, scan_linenr=%d\n",
               included_filenames.back().c_str(), scan_linenr);
    }
 }
 
-RCSC("$Id: lyutils.cpp,v 1.5 2015-04-09 19:34:17-07 - - $")
+RCSC("$Id: lyutils.cpp,v 1.3 2015-04-26 22:18:08-07 - - $")
 

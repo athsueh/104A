@@ -1,5 +1,5 @@
 %{
-// $Id: scanner.l,v 1.1 2015-04-26 20:23:14-07 - - $
+// $Id: scanner.l,v 1.2 2015-04-26 22:18:08-07 - - $
 
 #include "auxlib.h"
 #include "lyutils.h"
@@ -30,8 +30,8 @@ IDENT           ({LETTER}({LETTER}|{DIGIT})*)
 [ \t]+          { }
 \n              { scanner_newline(); }
 
-{NUMBER}        { return yylval_token (NUMBER); }
-{IDENT}         { return yylval_token (IDENT); }
+{NUMBER}        { return yylval_token (TOK_INT); }
+{IDENT}         { return yylval_token (TOK_IDENT); }
 
 "="             { return yylval_token ('='); }
 "+"             { return yylval_token ('+'); }
@@ -44,11 +44,11 @@ IDENT           ({LETTER}({LETTER}|{DIGIT})*)
 ";"             { return yylval_token (';'); }
 
 {NOTNUMBER}     { scanner_badtoken (yytext);
-                  return yylval_token (NUMBER); }
+                  return yylval_token (TOK_INT); }
 
 .               { scanner_badchar (*yytext); }
 
 %%
 
-RCSC("$Id: scanner.l,v 1.1 2015-04-26 20:23:14-07 - - $")
+RCSC("$Id: scanner.l,v 1.2 2015-04-26 22:18:08-07 - - $")
 
