@@ -129,7 +129,7 @@ int main (int argc, char** argv) {
 
    string command = CPP + " " + d_opt + filepath;
    DEBUGF ('T', "command=\"%s\"\n", command.c_str());
-   FILE* yyin = popen (command.c_str(), "r");
+   yyin = popen (command.c_str(), "r");
    if (yyin == NULL) {
       syserrprintf (command.c_str());
    }else {
@@ -139,6 +139,7 @@ int main (int argc, char** argv) {
 //      cpplines (pipe, &filepath_charstar[0]);
 
       while(yylex() != YYEOF) {
+         cout <<"yytext="<< *yytext << endl;
       }
 
       int pclose_rc = pclose (yyin);
