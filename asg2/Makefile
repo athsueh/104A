@@ -9,11 +9,13 @@ GMAKE       = ${MAKE} --no-print-directory
 COMPILECPP  = g++ -g -O0 -Wall -Wextra -std=gnu++11
 MAKEDEPCPP  = g++ -MM
 
-LSOURCES    = scanner.l
-HYGEN       = yyparse.h
-CYGEN       = yyparse.cpp
-LREPORT     = yylex.output
-YREPORT     = yyparse.output
+LSOURCES = scanner.l
+YSOURCES = parser.y
+CLGEN = yylex.cc
+HYGEN = yyparse.h
+CYGEN = yyparse.cc
+LREPORT = yylex.output
+YREPORT = yyparse.output
 
 CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp ${CLGEN} ${CYGEN}
 CPPHEADER   = auxlib.h stringset.h
@@ -50,8 +52,7 @@ again :
 
 ${CLGEN} : ${LSOURCES}
 	flex --outfile=${CLGEN} ${LSOURCES} 2>${LREPORT}
-	- grep -v 'ˆ ' ${LREPORT}
-
+	- grep -v ’ˆ ’ ${LREPORT}
 ${CYGEN} ${HYGEN} : ${YSOURCES}
 	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
