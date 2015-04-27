@@ -11,17 +11,18 @@ MAKEDEPCPP  = g++ -MM
 
 LSOURCES = scanner.l
 YSOURCES = parser.y
-CLGEN = yylex.cc
+CLGEN = yylex.cpp
 HYGEN = yyparse.h
-CYGEN = yyparse.cc
+CYGEN = yyparse.cpp
 LREPORT = yylex.output
 YREPORT = yyparse.output
 
-CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp ${CLGEN} ${CYGEN}
+CPPSOURCE   = auxlib.cpp cppstrtok.cpp stringset.cpp
 CPPHEADER   = auxlib.h stringset.h
 EXECBIN     = oc
 OBJECTS     = ${CPPSOURCE:.cpp=.o}
 OTHERS      = ${MKFILE} README PARTNER
+GENFILES    = ${CLGEN} ${CYGEN} ${HYGEN} ${LREPORT} ${YREPORT}
 ALLSOURCES  = ${CPPHEADER} ${CPPSOURCE} ${OTHERS}
 LISTING     = Listing.ps
 
@@ -39,10 +40,10 @@ ci : ${ALLSOURCES}
 	- checksource ${ALLSOURCES}
 
 lis : ${ALLSOURCES}
-	mkpspdf ${LISTING} ${ALLSOURCES} ${DEPFILE}
+	mkpspdf ${LISTING} ${ALLSOURCES} ${GENFILES} ${DEPFILE}
 
 clean :
-	- rm ${OBJECTS} ${DEPFILE} core ${EXECBIN}.errs
+	- rm ${OBJECTS} ${GENFILES} ${DEPFILE} core ${EXECBIN}.errs
 
 spotless : clean
 	- rm ${EXECBIN} ${LISTING} ${LISTING:.ps=.pdf}
@@ -52,7 +53,8 @@ again :
 
 ${CLGEN} : ${LSOURCES}
 	flex --outfile=${CLGEN} ${LSOURCES} 2>${LREPORT}
-	- grep -v ’ˆ ’ ${LREPORT}
+	- grep -v '^ ' ${LREPORT}
+
 ${CYGEN} ${HYGEN} : ${YSOURCES}
 	bison --defines=${HYGEN} --output=${CYGEN} ${YSOURCES}
 
