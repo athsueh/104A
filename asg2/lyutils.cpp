@@ -72,7 +72,7 @@ int yylval_token (int symbol) {
    //                     scan_linenr, offset, yytext);
 
   // FILE* tokfile = fopen
-   std::cout << fprintf (tokfile, "%4d%4d.%03d %4d %-16s (%s)\n", dircount, scan_linenr, offset, symbol, get_yytname(symbol), yytext);
+    fprintf (tokfile, "%4d%4d.%03d %4d %-16s (%s)\n", dircount, scan_linenr, offset, symbol, get_yytname(symbol), yytext);
    return symbol;
 }
 
@@ -97,7 +97,7 @@ void scanner_include (void) {
       errprintf ("%: %d: [%s]: invalid directive, ignored\n",
                  scan_rc, yytext);
    }else {
-      printf ("# %d \"%s\"\n", linenr, filename);
+      fprintf (tokfile, "# %d \"%s\"\n", linenr, filename);
       scanner_newfilename (filename);
       scan_linenr = linenr - 1;
       dircount++;
