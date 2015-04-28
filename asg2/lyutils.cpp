@@ -17,7 +17,7 @@ using namespace std;
 //astree* yyparse_astree = new_parseroot();
 int scan_linenr = 1;
 int scan_offset = 0;
-int dircount;
+int dircount = 0;
 bool scan_echo = false;
 vector<string> included_filenames;
 FILE* tokfile;
