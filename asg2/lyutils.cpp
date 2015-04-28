@@ -17,7 +17,7 @@ using namespace std;
 //astree* yyparse_astree = new_parseroot();
 int scan_linenr = 1;
 int scan_offset = 0;
-int dircount = 0;
+int dircount = -1;
 bool scan_echo = false;
 vector<string> included_filenames;
 FILE* tokfile;
@@ -106,5 +106,5 @@ void scanner_include (void) {
    }
 }
 
-RCSC("$Id: lyutils.cpp,v 1.3 2015-04-26 22:18:08-07 - - $")
+RCSC("$Id: lyutils.cpp,v 1.2 2015-04-27 20:37:54-07 - - $")
 
