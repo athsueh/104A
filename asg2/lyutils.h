@@ -17,6 +17,8 @@ extern char* yytext;
 extern int yy_flex_debug;
 extern int yydebug;
 extern int yyleng;
+extern int dircount;
+extern FILE* tokfile;
 
 int yylex (void);
 int yyparse (void);

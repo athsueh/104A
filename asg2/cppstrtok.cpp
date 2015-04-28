@@ -80,10 +80,10 @@ string scan_options (int argc, char** argv) {
             dStr=string(optarg);
          break;
          case 'y':
-            //yydebug = 1
+            yydebug = 1;
          break;
          case 'l':
-            //yy_flex_debug = 1
+            yy_flex_debug = 1;
           break;
          default:
             //complain() << "-" << (char) option << ": invalid option"
@@ -99,6 +99,7 @@ string scan_options (int argc, char** argv) {
 }
 
 int main (int argc, char** argv) {
+   yy_flex_debug = 0;
    set_execname (argv[0]);
    std::string d_opt = scan_options(argc,argv);
 
@@ -133,15 +134,28 @@ int main (int argc, char** argv) {
    if (yyin == NULL) {
       syserrprintf (command.c_str());
    }else {
-//      std::vector<char> filepath_charstar(filepath.begin(),
-//                                          filepath.end());
-//      filepath_charstar.push_back('\0');
+      std::vector<char> filepath_charstar(filepath.begin(),
+                                          filepath.end());
+      filepath_charstar.push_back('\0');
 //      cpplines (pipe, &filepath_charstar[0]);
+      
+      string tokfilename = filename.substr(0, lastindex) + ".tok";
+      tokfile = fopen(tokfilename.c_str(), "w");
 
-      while(yylex() != YYEOF) {
-         cout <<"yytext="<< *yytext << endl;
+      int yycode = yylex();
+      while(yycode != YYEOF) {
+      //while (yylex() != YYEOF) {
+         //cout << dircount << endl;
+         //cout << "token name: " << get_yytname(yycode) << endl;
+         //cout << "linenr: " << yylineno << endl;
+        // cout <<"yytext="<< yytext << endl;
+         //cout <<"yylex() = "<< yycode <<endl;
+         intern_stringset(yytext);
+         yycode = yylex();
+         
       }
-
+      //cout<< "cppstrtok tokfile: " <<tokfile <<endl;
+      fclose(tokfile);
       int pclose_rc = pclose (yyin);
       eprint_status (command.c_str(), pclose_rc);
    }

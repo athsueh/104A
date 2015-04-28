@@ -6,6 +6,7 @@ using namespace std;
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,8 +17,10 @@ using namespace std;
 //astree* yyparse_astree = new_parseroot();
 int scan_linenr = 1;
 int scan_offset = 0;
+int dircount;
 bool scan_echo = false;
 vector<string> included_filenames;
+FILE* tokfile;
 
 const string* scanner_filename (int filenr) {
    return &included_filenames.at(filenr);
@@ -67,6 +70,9 @@ int yylval_token (int symbol) {
    int offset = scan_offset - yyleng;
    //yylval = new_astree (symbol, included_filenames.size() - 1,
    //                     scan_linenr, offset, yytext);
+
+  // FILE* tokfile = fopen
+   std::cout << fprintf (tokfile, "%4d%4d.%03d %4d %-16s (%s)\n", dircount, scan_linenr, offset, symbol, get_yytname(symbol), yytext);
    return symbol;
 }
 
@@ -91,9 +97,10 @@ void scanner_include (void) {
       errprintf ("%: %d: [%s]: invalid directive, ignored\n",
                  scan_rc, yytext);
    }else {
-      printf (";# %d \"%s\"\n", linenr, filename);
+      printf ("# %d \"%s\"\n", linenr, filename);
       scanner_newfilename (filename);
       scan_linenr = linenr - 1;
+      dircount++;
       DEBUGF ('m', "filename=%s, scan_linenr=%d\n",
               included_filenames.back().c_str(), scan_linenr);
    }
