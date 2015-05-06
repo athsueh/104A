@@ -1,0 +1,9 @@
+# 1 "test2.oc"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "test2.oc"
+   4   1.000  261 TOK_INT          (int)
+   4   1.004  279 TOK_IDENT        (i)
+   4   1.006   61 '='              (=)
+   4   1.008  280 TOK_INTCON       (0)
+   4   1.009   59 ';'              (;)
