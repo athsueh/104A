@@ -92,7 +92,9 @@ int main (int argc, char** argv) {
       return 1;
    }
 
-   filename = filename.substr(0, lastindex) + ".str";
+   std::string str_fname = filename.substr(0, lastindex) + ".str";
+   std::string tok_fname = filename.substr(0, lastindex) + ".tok";
+   std::string ast_fname = filename.substr(0, lastindex) + ".ast";
 
    string command = CPP + " " + d_opt + filepath;
    DEBUGF ('T', "command=\"%s\"\n", command.c_str());
@@ -103,33 +105,27 @@ int main (int argc, char** argv) {
       std::vector<char> filepath_charstar(filepath.begin(),
                                           filepath.end());
       filepath_charstar.push_back('\0');
-//      cpplines (pipe, &filepath_charstar[0]);
       
-      string tokfilename = filename.substr(0, lastindex) + ".tok";
-      tokfile = fopen(tokfilename.c_str(), "w");
+      tokfile = fopen(tok_fname.c_str(), "w");
 
-      int yycode = yylex();
-      while(yycode != YYEOF) {
-      //while (yylex() != YYEOF) {
-         //cout << dircount << endl;
-         //cout << "token name: " << get_yytname(yycode) << endl;
-         //cout << "linenr: " << yylineno << endl;
-        // cout <<"yytext="<< yytext << endl;
-         //cout <<"yylex() = "<< yycode <<endl;
-         intern_stringset(yytext);
-         yycode = yylex();
-         
-      }
-      //cout<< "cppstrtok tokfile: " <<tokfile <<endl;
+      yyparse();
+
       fclose(tokfile);
+
+      // dump the .str file
+      ofstream dotstr;
+      dotstr.open (str_fname);
+      dump_stringset(dotstr);
+      dotstr.close();
+
+      // dump the .ast file
+      FILE* dotast = fopen (ast_fname.c_str(), "w");
+      dump_astree(dotast, yyparse_astree);
+      fclose(dotast);
+
       int pclose_rc = pclose (yyin);
       eprint_status (command.c_str(), pclose_rc);
    }
-
-   ofstream dotstr;
-   dotstr.open (filename);
-   dump_stringset(dotstr);
-   dotstr.close();
 
    return get_exitstatus();
 }

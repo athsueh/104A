@@ -94,6 +94,7 @@ clean :
 
 spotless : clean
 	- rm ${EXECBIN} List.*.ps List.*.pdf
+	- rm *.str *.ast *.tok
 
 
 #

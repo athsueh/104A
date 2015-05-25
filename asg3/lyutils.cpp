@@ -13,14 +13,23 @@ using namespace std;
 #include "lyutils.h"
 #include "auxlib.h"
 
-//astree* yyparse_astree = NULL;
-//astree* yyparse_astree = new_parseroot();
+astree* yyparse_astree = NULL;
 int scan_linenr = 1;
 int scan_offset = 0;
 int dircount = -1;
 bool scan_echo = false;
 vector<string> included_filenames;
 FILE* tokfile;
+
+void dump_token(astree* t, FILE* fp){
+   fprintf(fp, "%5zu %2zu.%03zu %4u  %-15s (%s)\n",
+      t->filenr,
+      t->linenr,
+      t->offset,
+      t->symbol,
+      get_yytname(t->symbol),
+      t->lexinfo->c_str());
+}
 
 const string* scanner_filename (int filenr) {
    return &included_filenames.at(filenr);
@@ -68,24 +77,23 @@ void scanner_badtoken (char* lexeme) {
 
 int yylval_token (int symbol) {
    int offset = scan_offset - yyleng;
-   //yylval = new_astree (symbol, included_filenames.size() - 1,
-   //                     scan_linenr, offset, yytext);
+   yylval = new astree (symbol, included_filenames.size() - 1,
+                        scan_linenr, offset, yytext);
 
-  // FILE* tokfile = fopen
-    fprintf (tokfile, "%4d%4d.%03d %4d %-16s (%s)\n", dircount, scan_linenr, offset, symbol, get_yytname(symbol), yytext);
+   dump_token(yylval, tokfile);
    return symbol;
 }
 
-/*void error_destructor (astree* tree) {
+void error_destructor (astree* tree) {
    if (tree == yyparse_astree) return;
    DEBUGSTMT ('a', dump_astree (stderr, tree); );
    free_ast (tree);
 }
 
 astree* new_parseroot (void) {
-   yyparse_astree = new_astree (ROOT, 0, 0, 0, "<<ROOT>>");
+   yyparse_astree = new astree (TOK_ROOT, 0, 0, 0, "<<ROOT>>");
    return yyparse_astree;
-}*/
+}
 
 
 void scanner_include (void) {

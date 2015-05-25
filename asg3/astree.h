@@ -18,11 +18,22 @@ struct astree {
            int offset, const char* clexinfo);
 };
 
+astree* new_astree (int symbol, int filenr, int linenr, int offset,
+                    const char* lexinfo);
+astree* new_function (
+      astree* identdecl, astree* paramlist, astree* block);
+astree* new_proto (astree* identdecl, astree* paramlist);
+
 // Append one child to the vector of children.
 astree* adopt1 (astree* root, astree* child);
 
 // Append two children to the vector of children.
 astree* adopt2 (astree* root, astree* left, astree* right);
+
+astree* adopt1sym (astree* root, astree* child, int symbol);
+astree* adopt2sym (
+      astree* root, astree* left, astree* right, int symbol);
+astree* change_sym (astree* root, int symbol);
 
 // Dump an astree to a FILE.
 void dump_astree (FILE* outfile, astree* root);
