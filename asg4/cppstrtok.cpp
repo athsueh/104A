@@ -125,7 +125,12 @@ int main (int argc, char** argv) {
 
       int pclose_rc = pclose (yyin);
       eprint_status (command.c_str(), pclose_rc);
-   }
+
+      // dump the .sym file
+      FILE* dotsym = fopen (sym_fname.c_str(), "w");
+      identTable->dump(dotsym,0);
+      fclose(dotsym);	
+  }
 
    return get_exitstatus();
 }
